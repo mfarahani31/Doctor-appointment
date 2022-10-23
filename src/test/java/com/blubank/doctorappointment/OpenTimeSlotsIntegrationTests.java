@@ -41,7 +41,7 @@ class OpenTimeSlotsIntegrationTests {
     }
 
     @Test
-    public void addOpenTimeEndEarlierThanStartByDoctorId() throws Exception {
+    public void getOpenTimeSlots_whenDoctorId_notExist_thenReturnNotFound() throws Exception {
         mockMvc.perform(get("/api/v1/openTimeSlots/getByDoctorId/5"))
                 .andDo(print())
                 .andExpect(
@@ -49,7 +49,7 @@ class OpenTimeSlotsIntegrationTests {
     }
 
     @Test
-    public void getOpenTimeEndEarlierThanStartByDoctorId() throws Exception {
+    public void getOpenTimeSlots_ifNoAppointmentSet_thenReturnEmptyList() throws Exception {
         mockMvc.perform(get("/api/v1/openTimeSlots/getByDoctorId/1"))
                 .andDo(print())
                 .andExpect(jsonPath("$").isEmpty())
