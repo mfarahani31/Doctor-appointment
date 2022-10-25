@@ -1,5 +1,6 @@
 package com.blubank.doctorappointment;
 
+import com.blubank.doctorappointment.dto.OpenTimeDTO;
 import com.blubank.doctorappointment.model.Doctor;
 import com.blubank.doctorappointment.model.OpenTime;
 import com.blubank.doctorappointment.model.OpenTimeSlot;
@@ -17,6 +18,10 @@ public class MotherObject {
                 "  \"startTime\": \"2022-10-19T10:01:45.083Z\",\n" +
                 "  \"endTime\": \"2022-10-19T11:55:45.083Z\"\n" +
                 "}";
+    }
+
+    public static String getAnyDate() {
+        return "2022-10-20T07:08:33.839Z";
     }
 
     public static String getAnyOpenTimeEndEarlierThanStartInJson() {
@@ -41,6 +46,24 @@ public class MotherObject {
         return new Doctor("John", null);
     }
 
+    public static Doctor getAnyDoctorWithOpenTime() {
+        return new Doctor("John", List.of(getAnyOpenTimeObjectWithoutDoctor()));
+    }
+
+    public static OpenTime getAnyOpenTimeObjectWithoutDoctor() {
+        var dt = new Date();
+        var c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 2);
+        c.add(Calendar.HOUR, 1);
+        dt = c.getTime();
+        var openTime = new OpenTime(dt, dt, dt, getAnyDoctor(), openTimeSlotList());
+        c.add(Calendar.HOUR, 2);
+        dt = c.getTime();
+        openTime.setEndTime(dt);
+        return openTime;
+    }
+
     public static OpenTime getAnyOpenTimeObject() {
         var dt = new Date();
         var c = Calendar.getInstance();
@@ -53,6 +76,20 @@ public class MotherObject {
         dt = c.getTime();
         openTime.setEndTime(dt);
         return openTime;
+    }
+
+    public static OpenTimeDTO getAnyOpenTimeDTOObject() {
+        var dt = new Date();
+        var c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 2);
+        c.add(Calendar.HOUR, 1);
+        dt = c.getTime();
+        var openTimeDTO = new OpenTimeDTO(dt, dt, dt);
+        c.add(Calendar.HOUR, 2);
+        dt = c.getTime();
+        openTimeDTO.setEndTime(dt);
+        return openTimeDTO;
     }
 
     public static OpenTime getAnyOpenTimeObjectEmptySlot() {
@@ -71,5 +108,25 @@ public class MotherObject {
 
     public static OpenTimeSlot getAnyOpenTimeSlot() {
         return new OpenTimeSlot(new Date(), getAnyOpenTimeObject(), null);
+    }
+
+    public static Date getAnyBeforeDate() {
+        var date = new Date();
+        var c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, -1);
+        return c.getTime();
+    }
+
+    public static Date getAnyAfterDate() {
+        var date = new Date();
+        var c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, +1);
+        return c.getTime();
+    }
+
+    public static List<OpenTimeSlot> getAnyOpenTimeSlotList() {
+        return List.of(getAnyOpenTimeSlot());
     }
 }

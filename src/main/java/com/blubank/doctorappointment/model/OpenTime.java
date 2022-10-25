@@ -7,9 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +27,7 @@ public class OpenTime extends BaseEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
 
-    @Column(name = "end_Time")
+    @Column(name = "end_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endTime;
 

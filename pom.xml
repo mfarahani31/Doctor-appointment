@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.blubank</groupId>
 	<artifactId>doctor-appointment</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
 	<name>doctor-appointment</name>
 	<description>Demo project for blu Bank</description>
 	<properties>

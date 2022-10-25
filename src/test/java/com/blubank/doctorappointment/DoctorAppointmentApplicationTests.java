@@ -1,9 +1,5 @@
 package com.blubank.doctorappointment;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +46,7 @@ class DoctorAppointmentApplicationTests {
                 .andExpect(
                         status().isBadRequest());
     }
+
     @Test
     public void addOpenTimePeriodLessThan30MinByDoctorId() throws Exception {
         mockMvc.perform(post("/api/v1/openTimes/addByDoctorId/1")
@@ -60,13 +57,6 @@ class DoctorAppointmentApplicationTests {
                 .andExpect(jsonPath("$.openTimes.length()").value(0))
                 .andExpect(
                         status().isCreated());
-    }
-
-    private String getRequestBodyAsString(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
     }
 
 

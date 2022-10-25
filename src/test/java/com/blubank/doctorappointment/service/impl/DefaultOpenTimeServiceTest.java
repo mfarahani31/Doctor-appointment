@@ -1,6 +1,7 @@
 package com.blubank.doctorappointment.service.impl;
 
 import com.blubank.doctorappointment.MotherObject;
+import com.blubank.doctorappointment.dto.OpenTimeDTO;
 import com.blubank.doctorappointment.exception.ElementNotFoundException;
 import com.blubank.doctorappointment.model.Doctor;
 import com.blubank.doctorappointment.model.OpenTime;
@@ -11,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -33,6 +32,7 @@ class DefaultOpenTimeServiceTest {
 
     Doctor doctor;
     OpenTime openTime;
+    OpenTimeDTO openTimeDTO;
     OpenTimeSlot openTimeSlot;
 
     @BeforeEach
@@ -40,6 +40,7 @@ class DefaultOpenTimeServiceTest {
         MockitoAnnotations.openMocks(this);
         doctor = MotherObject.getAnyDoctor();
         openTime = MotherObject.getAnyOpenTimeObject();
+        openTimeDTO = MotherObject.getAnyOpenTimeDTOObject();
         openTimeSlot = MotherObject.getAnyOpenTimeSlot();
     }
 
@@ -57,7 +58,7 @@ class DefaultOpenTimeServiceTest {
         when(openTimeRepository.save(this.openTime)).thenReturn(this.openTime);
         when(openTimeSlotService.save(this.openTimeSlot)).thenReturn(this.openTimeSlot);
 
-        var openTimeResponseDTO = openTimeService.addOpenTime(1L, this.openTime);
+        var openTimeResponseDTO = openTimeService.addOpenTime(1L, this.openTimeDTO);
 
         assertNotNull(openTimeResponseDTO.getOpenTimes());
     }
@@ -65,7 +66,7 @@ class DefaultOpenTimeServiceTest {
     @Test
     void addOpenTime_whenDoctorIdNotExist_thenThrowsException() {
         when(doctorService.findById(1L)).thenThrow(ElementNotFoundException.class);
-        assertThrows(ElementNotFoundException.class, () -> openTimeService.addOpenTime(1L, this.openTime));
+        assertThrows(ElementNotFoundException.class, () -> openTimeService.addOpenTime(1L, this.openTimeDTO));
     }
 
     @Test

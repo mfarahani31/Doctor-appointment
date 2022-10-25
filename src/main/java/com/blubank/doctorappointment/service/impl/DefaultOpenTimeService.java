@@ -1,6 +1,8 @@
 package com.blubank.doctorappointment.service.impl;
 
+import com.blubank.doctorappointment.dto.OpenTimeDTO;
 import com.blubank.doctorappointment.dto.OpenTimeResponseDTO;
+import com.blubank.doctorappointment.mapper.OpenTimeMapper;
 import com.blubank.doctorappointment.model.OpenTime;
 import com.blubank.doctorappointment.model.OpenTimeSlot;
 import com.blubank.doctorappointment.repository.OpenTimeRepository;
@@ -29,9 +31,9 @@ public class DefaultOpenTimeService implements OpenTimeService {
 
     @Transactional
     @Override
-    public OpenTimeResponseDTO addOpenTime(Long doctorId, OpenTime openTime) {
-        var doctor = this.doctorService.findById(doctorId);
-        openTime.setDoctor(doctor);
+    public OpenTimeResponseDTO addOpenTime(Long doctorId, OpenTimeDTO openTimeDTO) {
+        var openTime = OpenTimeMapper.INSTANCE.toOpenTime(openTimeDTO);
+        openTime.setDoctor(this.doctorService.findById(doctorId));
         this.save(openTime);
         if (TimeUnit.MILLISECONDS.toMinutes(openTime.getEndTime().getTime() - openTime.getStartTime().getTime()) < 30)
             return new OpenTimeResponseDTO(new ArrayList<>());
@@ -52,24 +54,30 @@ public class DefaultOpenTimeService implements OpenTimeService {
 
 
     private OpenTimeResponseDTO getIntervalBetweenStartAndEnd(Date date, Date start, Date end, int interval) {
-        var c = getCalendar(date);
+        var calendar = getCalendar(date);
         var dates = new ArrayList<Date>();
-        var startInMin = (start.getHours() * 60) + start.getMinutes();
-        var endInMin = (end.getHours() * 60) + end.getMinutes();
+        var startInMin = getTimeInMin(start);
+        var endInMin = getTimeInMin(end);
         for (int time = startInMin; time < endInMin; time += interval) {
             System.out.println(String.format("%02d:%02d", time / 60, time % 60));
-            c.set(Calendar.HOUR_OF_DAY, time / 60);
-            c.set(Calendar.MINUTE, time % 60);
-            dates.add(c.getTime());
+            calendar.set(Calendar.HOUR_OF_DAY, time / 60);
+            calendar.set(Calendar.MINUTE, time % 60);
+            dates.add(calendar.getTime());
         }
         return new OpenTimeResponseDTO(dates);
     }
 
     private Calendar getCalendar(Date date) {
-        var c = Calendar.getInstance();
-        c.set(Calendar.YEAR, date.getYear() + 1900);
-        c.set(Calendar.MONTH, date.getMonth());
-        c.set(Calendar.DAY_OF_MONTH, date.getDate());
-        return c;
+        var calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+    private int getTimeInMin(Date time) {
+        var calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        var hour = calendar.get(Calendar.HOUR_OF_DAY);
+        var min = calendar.get(Calendar.MINUTE);
+        return (hour * 60) + min;
     }
 }

@@ -1,6 +1,5 @@
 package com.blubank.doctorappointment.dto;
 
-import com.blubank.doctorappointment.model.OpenTime;
 import com.blubank.doctorappointment.model.PatientAppointment;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.micrometer.core.lang.Nullable;

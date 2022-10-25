@@ -43,7 +43,7 @@ create table patientappointments
     created_at        timestamp not null,
     updated_at        timestamp not null,
     patient_name      varchar(255),
-    phone_number      varchar(255),
+    phone_number      varchar(255) unique,
     version           int,
     open_time_slot_id bigint    not null,
     primary key (id),
